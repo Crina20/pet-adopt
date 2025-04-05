@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
+import { createUser } from "@/services/userService";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -20,10 +21,20 @@ export default function Home() {
       return;
     }
     setError("");
-    console.log("Email:", email, "Password:", password);
     try {
       const res = await createUserWithEmailAndPassword(email, password);
       console.log({ res });
+
+      if (res) {
+        await createUser({ uid: res?.user.uid, email: email });
+      } else {
+        setError("User already exists");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        return;
+      }
+
       setEmail("");
       setPassword("");
       setConfirmPassword("");

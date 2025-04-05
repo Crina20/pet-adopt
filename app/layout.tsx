@@ -1,14 +1,11 @@
 "use client";
 
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { FirebaseUserProvider } from "@/contexts/FirebaseUserContext"; // Import FirebaseUserContextProvider
+import Loader from "@/components/loader"; // Your loader component
 import "./globals.css";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config"; // Update to match your Firebase config path
-import { useRouter } from "next/navigation";
-import Loader from "@/components/loader"; // Path to your loader component
-import { useEffect } from "react";
 
+// Add Google Fonts
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,35 +21,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [user, loading] = useAuthState(auth); // Firebase hook to track auth state
-  const router = useRouter();
-
-  console.log({ user });
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/sign-in"); // Redirect to sign-in if user is not authenticated
-      return;
-    }
-  });
-
-  if (loading)
-    return (
+  return (
+    <FirebaseUserProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Loader />
+          {/* Children will have access to the user context */}
+          {children}
         </body>
       </html>
-    ); // Show loader while checking auth state
-
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    </FirebaseUserProvider>
   );
 }
