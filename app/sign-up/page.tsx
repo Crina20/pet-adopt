@@ -57,6 +57,7 @@ export default function Home() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
           <div className="mb-4">
@@ -67,6 +68,7 @@ export default function Home() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
           <button

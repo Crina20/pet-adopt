@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
+import { browserLocalPersistence, setPersistence } from "firebase/auth";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -23,14 +24,18 @@ export default function Signin() {
     console.log("Sign In:", email, password);
 
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const res = await signInWithEmailAndPassword(email, password);
       console.log({ res });
+      if (res) {
+        setEmail("");
+        setPassword("");
+        setError("");
 
-      setEmail("");
-      setPassword("");
-      setError("");
-
-      router.push("/");
+        router.push("/");
+      } else {
+        setError("Invalid Credentials");
+      }
     } catch (e) {
       console.log("sign-in " + e);
     }
@@ -60,6 +65,7 @@ export default function Signin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
           <button
