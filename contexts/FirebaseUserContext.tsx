@@ -3,13 +3,13 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config"; // Your Firebase config file
 import { usePathname, useRouter } from "next/navigation";
-import axios from "axios"; // For making requests to your backend
 import { User } from "@prisma/client";
 import { getUser } from "@/services/userService";
 
 interface FirebaseUserContextType {
   user: User | null;
   loading: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>; // Add setUser method here
 }
 
 const FirebaseUserContext = createContext<FirebaseUserContextType | undefined>(
@@ -65,7 +65,7 @@ export const FirebaseUserProvider = ({
 
   return (
     <FirebaseUserContext.Provider
-      value={{ user, loading: loading || loadingFirebase }}
+      value={{ user, setUser, loading: loading || loadingFirebase }}
     >
       {children}
     </FirebaseUserContext.Provider>

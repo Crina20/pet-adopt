@@ -24,6 +24,26 @@ model User {
   picture     String?
   description String?
 
+  animals Animal[]
+
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
+}
+
+model Animal {
+  id          String   @id @default(cuid())
+  name        String
+  species     String
+  breed       String?
+  age         Int?
+  gender      String
+  description String?
+  image       String? // Poate fi un URL (ex: Cloudinary)
+  location    String?
+  status      String   @default("available") // or "adopted"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }

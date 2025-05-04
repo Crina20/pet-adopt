@@ -8,6 +8,10 @@ export async function createUser(createUser: CreateUserModel) {
 
 export async function getUser(uid: string): Promise<User | null> {
   const result = await axios.get(`/api/get-user/${uid}`);
-  const userResult: User = await result.data;
+  const userResult: User = (await result.data).data;
   return userResult;
+}
+
+export async function updateUserProfile(userModel: User) {
+  await axios.put("/api/update-user", userModel);
 }
