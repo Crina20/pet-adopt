@@ -39,7 +39,8 @@ model Animal {
   gender      String
   description String?
   image       String? // Poate fi un URL (ex: Cloudinary)
-  location    String?
+  latitude    Float?
+  longitude   Float?
   status      String   @default("available") // or "adopted"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

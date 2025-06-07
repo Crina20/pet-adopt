@@ -2,8 +2,8 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { FirebaseUserProvider } from "@/contexts/FirebaseUserContext"; // Import FirebaseUserContextProvider
-import Loader from "@/components/loader"; // Your loader component
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 // Add Google Fonts
 const geistSans = Geist({
@@ -27,7 +27,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          {/* Children will have access to the user context */}
+          <Navbar /> {/* Always on top */}
           {children}
         </body>
       </html>

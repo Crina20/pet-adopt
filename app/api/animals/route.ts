@@ -28,12 +28,14 @@ export async function POST(req: Request) {
     gender,
     description,
     image,
-    location,
+    latitude,
+    longitude,
     userId,
   } = data;
 
   const intAge = parseInt(age) ?? null;
-
+  const intLatitude = parseFloat(latitude) ?? null;
+  const intLongitude = parseFloat(longitude) ?? null;
   try {
     const newAnimal = await prisma.animal.create({
       data: {
@@ -44,7 +46,8 @@ export async function POST(req: Request) {
         gender,
         description,
         image,
-        location,
+        latitude: intLatitude,
+        longitude: intLongitude,
         userId: userId,
       },
     });

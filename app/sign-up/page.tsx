@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { createUser } from "@/services/userService";
-
+import { useRouter } from "next/navigation";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const router = useRouter();
 
   const [createUserWithEmailAndPassword] =
     useCreateUserWithEmailAndPassword(auth);
@@ -39,6 +41,7 @@ export default function Home() {
       setPassword("");
       setConfirmPassword("");
       setError("");
+      router.push("/sign-in");
     } catch (e) {
       console.log(e);
     }

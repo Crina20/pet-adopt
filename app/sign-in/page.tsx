@@ -32,7 +32,7 @@ export default function Signin() {
         setPassword("");
         setError("");
 
-        router.push("/");
+        router.push("/animals");
       } else {
         setError("Invalid Credentials");
       }
@@ -70,9 +70,18 @@ export default function Signin() {
           </div>
           <button
             type="submit"
-            className="w-full p-2 bg-blue-500 hover:bg-blue-600 rounded transition"
+            className="w-full p-2 mb-2 bg-blue-500 hover:bg-blue-600 rounded transition"
           >
             Sign In
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/sign-up");
+            }}
+            className="w-full p-2 bg-blue-500 hover:bg-blue-600 rounded transition"
+          >
+            Register new account
           </button>
         </form>
       </div>

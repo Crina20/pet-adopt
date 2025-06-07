@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
@@ -25,8 +25,13 @@ export default function AnimalForm({
     gender: initialData?.gender || "",
     description: initialData?.description || "",
     image: initialData?.image || "",
-    location: initialData?.location || "",
+    latitude: 0,
+    longitude: 0,
   });
+
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
+    null
+  );
 
   const router = useRouter();
 
@@ -48,7 +53,20 @@ export default function AnimalForm({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Funcție pentru a încărca imaginea
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCoords({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (err) => {
+        console.error("Failed to get location", err);
+      }
+    );
+  }, []);
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -79,6 +97,10 @@ export default function AnimalForm({
 
     const method = isEdit ? "PUT" : "POST";
     const endpoint = isEdit ? `/api/animals/${initialData.id}` : "/api/animals";
+    if (coords?.lat && coords.lng) {
+      formData.latitude = coords?.lat;
+      formData.longitude = coords?.lng;
+    }
 
     const res = await fetch(endpoint, {
       method,
@@ -89,7 +111,7 @@ export default function AnimalForm({
     });
 
     if (res.ok) {
-      router.push("/");
+      router.push("/animals");
     } else {
       alert("Error saving the data.");
     }
