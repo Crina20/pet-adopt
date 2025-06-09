@@ -66,7 +66,7 @@ export default function AnimalsPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-white">Available Animals</h1>
+      <h1 className="text-3xl font-bold mb-6 text-black">Available Pets</h1>
 
       {/* Filters */}
       <div className="mb-6 flex gap-4 flex-wrap">
@@ -76,7 +76,7 @@ export default function AnimalsPage() {
             setSelectedSpecies(e.target.value);
             setSelectedBreed(""); // Reset breed on species change
           }}
-          className="p-2 rounded bg-gray-700 text-white border border-gray-600"
+          className="p-2 rounded bg-stone-900 text-white border border-gray-600"
         >
           <option value="">All Species</option>
           {uniqueSpecies.map((species) => (
@@ -90,7 +90,7 @@ export default function AnimalsPage() {
         <select
           value={selectedBreed}
           onChange={(e) => setSelectedBreed(e.target.value)}
-          className="p-2 rounded bg-gray-700 text-white border border-gray-600"
+          className="p-2 rounded bg-stone-900 text-white border border-gray-600"
           disabled={!selectedSpecies}
         >
           <option value="">All Breeds</option>

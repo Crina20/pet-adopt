@@ -57,8 +57,8 @@ export default function ConversationsPage() {
   };
 
   return (
-    <div className="flex flex-col h-[90vh] max-w-3xl mx-auto bg-gray-900 text-white rounded-xl shadow-lg overflow-hidden">
-      <div className="p-4 border-b border-gray-700 bg-gray-800">
+    <div className="flex flex-col h-[80vh] max-w-3xl mt-5 mx-auto color-section text-black rounded-xl shadow-lg overflow-hidden">
+      <div className="p-4 border-b color-section bg-gray-800">
         <h1 className="text-xl font-semibold">My Conversations</h1>
       </div>
 
@@ -68,7 +68,7 @@ export default function ConversationsPage() {
           return (
             <div
               key={conv.id}
-              className="flex items-center gap-4 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer"
+              className="flex items-center gap-4 p-3 rounded-lg color-button hover:bg-gray-700 cursor-pointer"
               onClick={() => handleConversationClick(conv.id)}
             >
               <div className="w-12 h-12 rounded-full bg-gray-600">

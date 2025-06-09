@@ -29,6 +29,8 @@ export default function AnimalForm({
     longitude: 0,
   });
 
+  const [adoptionButtonDisabled, setAdoptionButtonDisabled] = useState(false);
+
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
     null
   );
@@ -75,12 +77,11 @@ export default function AnimalForm({
 
       try {
         const res = await axios.post(
-          `https://api.imgbb.com/1/upload?key=b4e260b59d91b9deb65fba93ae3443de`, // Replace with your ImgBB API key
+          `https://api.imgbb.com/1/upload?key=b4e260b59d91b9deb65fba93ae3443de`,
           uploadData
         );
 
         if (res.data.data.url) {
-          // Presupunem că serverul returnează un obiect cu un câmp `url`
           setFormData({ ...formData, image: res.data.data.url });
         } else {
           alert("Error uploading the image.");
@@ -145,44 +146,67 @@ export default function AnimalForm({
     }
   };
 
+  const handleAdoptionRequest = async () => {
+    var adoptionData = {
+      animalId: initialData.id,
+      requestedById: userId,
+      requestedToId: initialData.user.id,
+      status: 1,
+    };
+
+    const res = await axios.post("/api/adoption", adoptionData);
+    if (res) {
+      alert("Adoption request sent to owner");
+      setAdoptionButtonDisabled(true);
+    }
+  };
+
   return (
     <div className="flex">
       <form
         onSubmit={handleSubmit}
-        className="max-w-4xl mx-auto p-6 bg-gray-800 text-white shadow rounded-xl space-y-4 flex flex-col md:flex-row"
+        className="mx-auto p-6 color-section text-black shadow rounded-xl space-y-4 flex flex-col md:flex-row"
       >
-        <div className="w-80 mr-5">
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
-            {isEdit ? "Edit Animal" : "Add Animal"}
+        <div className="w-90 mr-5">
+          <h2 className="text-2xl font-semibold text-black mb-3">
+            {isEdit ? "Edit Pet" : "Add New Pet"}
           </h2>
 
-          {/* Coloană stângă pentru imagine */}
-          <div className="flex-none w-full h-4/5 mb-4 md:mb-0">
+          <div className="flex-none w-90 h-4/5 mb-3 md:mb-0">
             {formData.image && (
               <img
                 src={formData.image}
                 alt="Animal"
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-contain object-center bg-gray-100 rounded-lg"
               />
             )}
             <div className="mt-2 w-full">
               {!isReadonly && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  disabled={isReadonly}
-                  className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div>
+                  <label
+                    htmlFor="image-upload"
+                    className="block w-full cursor-pointer p-2 text-white rounded text-center color-button focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {"Upload new image"}
+                  </label>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={isReadonly}
+                    className="hidden"
+                  />
+                </div>
               )}
             </div>
           </div>
         </div>
         {/* Coloană dreaptă pentru restul câmpurilor */}
-        <div className="flex-1 space-y-4">
+        <div className="flex-1 w-80 space-y-4">
           {/* Input pentru Name */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Name</label>
+          <div className="mb-3">
+            <label className="block text-sm mb-1">Name</label>
             <input
               type="text"
               name="name"
@@ -190,19 +214,19 @@ export default function AnimalForm({
               onChange={handleChange}
               placeholder="Name"
               disabled={isReadonly}
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Dropdown pentru Species */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Species</label>
+          <div className="mb-3">
+            <label className="block text-sm mb-1">Species</label>
             <select
               name="species"
               value={formData.species}
               onChange={handleChange}
               disabled={isReadonly}
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Species</option>
               {speciesList.map((species) => (
@@ -215,14 +239,14 @@ export default function AnimalForm({
 
           {/* Dropdown pentru Breed */}
           {formData.species && (
-            <div className="mb-4">
-              <label className="block text-sm mb-2">Breed</label>
+            <div className="mb-3">
+              <label className="block text-sm mb-1">Breed</label>
               <select
                 name="breed"
                 value={formData.breed}
                 onChange={handleChange}
                 disabled={isReadonly}
-                className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Breed</option>
                 {breedList[formData.species]?.map((breed: string) => (
@@ -235,8 +259,8 @@ export default function AnimalForm({
           )}
 
           {/* Input pentru Age */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Age</label>
+          <div className="mb-3">
+            <label className="block text-sm mb-1">Age</label>
             <input
               type="number"
               name="age"
@@ -244,19 +268,19 @@ export default function AnimalForm({
               onChange={handleChange}
               disabled={isReadonly}
               placeholder="Age"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Dropdown pentru Gender */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Gender</label>
+          <div className="mb-3">
+            <label className="block text-sm mb-1">Gender</label>
             <select
               name="gender"
               value={formData.gender}
               disabled={isReadonly}
               onChange={handleChange}
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Gender</option>
               {genderList.map((gender) => (
@@ -267,30 +291,17 @@ export default function AnimalForm({
             </select>
           </div>
 
-          {/* Input pentru Location */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Location</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              placeholder="Location"
-              disabled={isReadonly}
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
           {/* Input pentru Description */}
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Description</label>
+          <div className="mb-3">
+            <label className="block text-sm mb-1">Description</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               disabled={isReadonly}
+              rows={7}
               placeholder="Description"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -298,9 +309,9 @@ export default function AnimalForm({
             type="submit"
             disabled={isReadonly}
             hidden={isReadonly}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400"
+            className="w-full color-button text-black py-2 px-4 rounded-lg transition disabled:bg-gray-400"
           >
-            {isEdit ? "Save Changes" : "Add Animal"}
+            {isEdit ? "Save Changes" : "Create New Pet"}
           </button>
 
           {isEdit && (
@@ -321,15 +332,26 @@ export default function AnimalForm({
                   else alert("Error deleting the animal.");
                 }
               }}
-              className="w-full mt-2 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"
+              className="w-full mt-2 bg-red-800 text-white py-2 px-4 rounded-lg hover:bg-red-900 transition"
             >
-              Delete Animal
+              Remove Pet
+            </button>
+          )}
+
+          {isReadonly && (
+            <button
+              disabled={adoptionButtonDisabled}
+              type="button"
+              className={"w-full mt-2 text-white px-4 py-2 rounded " + (adoptionButtonDisabled ? "bg-orange-200" : "color-button")}
+              onClick={handleAdoptionRequest}
+            >
+              Request Adoption
             </button>
           )}
         </div>
       </form>
       {initialData?.user && (
-        <div className="p-4 mt-4 rounded bg-gray-700 text-white h-10/12">
+        <div className="p-4 mt-4 rounded color-section text-black h-10/12">
           <p className="text-sm text-gray-400">Posted by:</p>
           {initialData.user.picture ? (
             <div className="mt-4">
@@ -340,7 +362,7 @@ export default function AnimalForm({
               />
             </div>
           ) : (
-            <div className="mt-4 bg-gray-600 w-32 h-32 rounded-full flex items-center justify-center text-white">
+            <div className="mt-4 bg-gray-600 w-32 h-32 rounded-full flex items-center justify-center text-black">
               No Image
             </div>
           )}
@@ -353,7 +375,7 @@ export default function AnimalForm({
           {isReadonly ? (
             <button
               onClick={handleMessage}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="mt-4 color-button text-white px-4 py-2 rounded hover:bg-blue-700"
             >
               Send Message
             </button>

@@ -42,8 +42,8 @@ export default function Signin() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-96">
+    <div className="flex items-center justify-center min-h-screen text-black">
+      <div className="color-section p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleSignin}>
@@ -51,7 +51,7 @@ export default function Signin() {
             <label className="block text-sm mb-2">Email</label>
             <input
               type="email"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -61,7 +61,7 @@ export default function Signin() {
             <label className="block text-sm mb-2">Password</label>
             <input
               type="password"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -70,7 +70,7 @@ export default function Signin() {
           </div>
           <button
             type="submit"
-            className="w-full p-2 mb-2 bg-blue-500 hover:bg-blue-600 rounded transition"
+            className="w-full p-2 mb-2 color-button hover:bg-blue-600 rounded transition"
           >
             Sign In
           </button>
@@ -79,7 +79,7 @@ export default function Signin() {
               e.preventDefault();
               router.push("/sign-up");
             }}
-            className="w-full p-2 bg-blue-500 hover:bg-blue-600 rounded transition"
+            className="w-full p-2 color-button hover:bg-blue-600 rounded transition"
           >
             Register new account
           </button>

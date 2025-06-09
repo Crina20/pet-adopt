@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -24,7 +23,12 @@ model User {
   picture     String?
   description String?
 
+  isAdmin     Boolean @default(false)
+  isActive    Boolean @default(true)
+
   animals Animal[]
+  requestsMade     PetAdoption[] @relation("RequestsMade")
+  requestsReceived PetAdoption[] @relation("RequestsReceived")
 
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
@@ -38,13 +42,32 @@ model Animal {
   age         Int?
   gender      String
   description String?
-  image       String? // Poate fi un URL (ex: Cloudinary)
+  image       String?
   latitude    Float?
   longitude   Float?
-  status      String   @default("available") // or "adopted"
+  status      String   @default("available")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  adoptionRequests PetAdoption[]
+
   userId String
   user   User   @relation(fields: [userId], references: [id])
+}
+
+model PetAdoption{
+  id      String @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  animalId String
+  animal Animal @relation(fields: [animalId], references: [id])
+
+  requestedById String
+  requestedBy User @relation("RequestsMade", fields: [requestedById], references: [id])
+
+  requestedToId String
+  requestedTo User @relation("RequestsReceived", fields: [requestedToId], references: [id])
+
+  status Int
 }

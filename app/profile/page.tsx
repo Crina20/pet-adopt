@@ -81,12 +81,11 @@ const Profile = () => {
     }
   };
 
-  // Show a loader while data is being fetched or image is uploading
   if (loading || loadingImage) return <Loader />;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-3/5 flex space-x-6">
+    <div className="flex items-center justify-center min-h-screen text-black">
+      <div className="color-section p-8 rounded-lg shadow-lg w-3/5 flex space-x-6">
         {/* Left side - Profile Picture, Full Name, Description */}
         <div className="flex flex-col items-center space-y-4 w-2/3">
           <div
@@ -107,11 +106,11 @@ const Profile = () => {
                 <img
                   src={imageURL}
                   alt="Profile"
-                  className="w-52 h-52 rounded-full"
+                  className="w-52 h-52 rounded-full object-contain object-center bg-gray-100"
                 />
               </div>
             ) : (
-              <div className="mt-4 bg-gray-600 w-32 h-32 rounded-full flex items-center justify-center text-white">
+              <div className="mt-4 color-input w-32 h-32 rounded-full flex items-center justify-center text-black">
                 No Image
               </div>
             )}
@@ -120,7 +119,7 @@ const Profile = () => {
           <div className="mb-4 w-full">
             <label className="block text-sm mb-2">Description</label>
             <textarea
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={description}
               rows={5}
               onChange={(e) => setDescription(e.target.value)}
@@ -134,7 +133,7 @@ const Profile = () => {
             <label className="block text-sm mb-2">Email</label>
             <input
               type="email"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={user?.email || ""}
               readOnly
             />
@@ -144,7 +143,7 @@ const Profile = () => {
             <label className="block text-sm mb-2">Phone Number</label>
             <input
               type="text"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -154,7 +153,7 @@ const Profile = () => {
             <label className="block text-sm mb-2">Full Name</label>
             <input
               type="text"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
@@ -164,7 +163,7 @@ const Profile = () => {
             <label className="block text-sm mb-2">Address</label>
             <input
               type="text"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -174,16 +173,16 @@ const Profile = () => {
             <label className="block text-sm mb-2">Age</label>
             <input
               type="number"
-              className="w-full p-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 color-input rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={age ?? ""}
-              onChange={(e) => setAge(parseInt(e.target.value))}
+              onChange={(e) => setAge(e.target.value ? parseInt(e.target.value) : null)}
             />
           </div>
 
           <button
             type="button"
             onClick={handleSave}
-            className="w-full p-2 bg-blue-500 hover:bg-blue-600 rounded transition mt-11"
+            className="w-full p-2 color-button rounded transition mt-11"
           >
             Save Changes
           </button>
